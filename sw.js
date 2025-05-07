@@ -1,12 +1,12 @@
-const CACHE_NAME = 'field-inspection-cache-v3'; // Increment version to force update
+const CACHE_NAME = 'field-inspection-cache-v4'; // Increment version to force update
 const urlsToCache = [
-  '/', // Or '/index-worker.html' if that's your explicit start_url
-  '/index-worker.html',
-  '/style.css',
-  '/app.js',
-  '/manifest.json',
-  '/icon.png',
-  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2' // Cache Supabase library
+  './', // Represents the root of your deployment relative to sw.js
+  './index-worker.html',
+  './style.css',
+  './app.js',
+  './manifest.json',
+  './icon.png', // Assuming icon.png is in the root with sw.js
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'
 ];
 
 // Install: Cache core assets
