@@ -1,4 +1,4 @@
-const CACHE_NAME = 'field-inspection-cache-v4'; // Increment version to force update
+const CACHE_NAME = 'field-inspection-cache-v4'; // Increment version if you make changes to cached files
 const urlsToCache = [
   './', // Represents the root of your deployment relative to sw.js
   './index-worker.html',
@@ -43,10 +43,11 @@ self.addEventListener('activate', event => {
 // Fetch: Serve from cache first for core assets, network for others (like API calls)
 self.addEventListener('fetch', event => {
   // Let browser handle Supabase API calls, function calls, and storage interactions directly
-  if (event.request.url.includes(SUPABASE_URL_FROM_APP_JS_CONFIG) || // You might need to expose SUPABASE_URL here
-      event.request.url.includes('/rest/v1/') ||
+  if (event.request.url.includes('/rest/v1/') ||
       event.request.url.includes('/functions/v1/') ||
-      event.request.url.includes('/storage/v1/')) {
+      event.request.url.includes('/storage/v1/') ||
+      event.request.url.includes(new URL(self.registration.scope).origin + '/auth/v1') // Catch auth calls too
+     ) {
     event.respondWith(fetch(event.request));
     return;
   }
@@ -83,8 +84,3 @@ self.addEventListener('fetch', event => {
       })
   );
 });
-
-// Placeholder for SUPABASE_URL. This is tricky as SW doesn't have direct access to JS variables from app.js
-// For a robust solution, you'd pass this via postMessage or hardcode if it never changes.
-// For simplicity now, we'll rely on the path checks above.
-// const SUPABASE_URL_FROM_APP_JS_CONFIG = 'YOUR_SUPABASE_URL'; // Replace if needed for explicit exclusion
