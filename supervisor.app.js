@@ -4,7 +4,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const MAP_IMAGE_BUCKET = 'inspection-maps';
 
 // --- Initialize Supabase Client ---
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // --- DOM Elements ---
 const supervisorAuthSection = document.getElementById('supervisorAuthSection');
