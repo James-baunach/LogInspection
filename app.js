@@ -21,7 +21,7 @@ const KY_MIN_LON = -89.57;
 const KY_MAX_LON = -81.96;
 
 // --- Initialize Supabase Client ---
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // --- DOM Elements ---
 const authSection = document.getElementById('authSection');
