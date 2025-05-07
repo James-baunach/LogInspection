@@ -1,4 +1,4 @@
-const CACHE_NAME = 'field-inspection-cache-v4'; // Increment version if you make changes to cached files
+const CACHE_NAME = 'field-inspection-cache-v5'; // Increment version if you make changes to cached files
 const urlsToCache = [
   './', // Represents the root of your deployment relative to sw.js
   './index-worker.html',
