@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Supervisor Dashboard</title>
     <link rel="stylesheet" href="supervisor.style.css">
+    <!-- Supabase library loaded first -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Your app script, deferred -->
+    <script src="supervisor.app.js" defer></script>
 </head>
 <body>
     <h1>Supervisor Dashboard</h1>
@@ -97,6 +100,6 @@
         </form>
     </dialog>
 
-    <script src="supervisor.app.js"></script>
+    <!-- NO SCRIPT TAGS HERE AT THE END OF THE BODY ANYMORE -->
 </body>
 </html>
