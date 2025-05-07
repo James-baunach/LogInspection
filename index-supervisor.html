@@ -5,23 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Supervisor Dashboard</title>
     <link rel="stylesheet" href="supervisor.style.css">
-    <!-- Supabase library loaded first in HEAD -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- supervisor.app.js will be loaded and initialized at the end of the body -->
 </head>
 <body>
     <h1>Supervisor Dashboard</h1>
 
-    <div id="supervisorAuthSection">
-        <h2>Supervisor Login</h2>
-        <input type="email" id="supervisorEmail" placeholder="Supervisor Email (e.g., admin@...)" required><br>
-        <input type="password" id="supervisorPassword" placeholder="Password" required><br>
-        <button id="supervisorLoginBtn">Login</button>
-        <p id="supervisorAuthStatus"></p>
-    </div>
+    <!-- supervisorAuthSection REMOVED -->
 
-    <div id="supervisorMainContent" class="hidden">
-        <p>Logged in as: <span id="supervisorUserEmail"></span> <button id="supervisorLogoutBtn">Logout</button></p>
+    <div id="supervisorMainContent"> <!-- No longer hidden by default -->
+        <!-- Logged in as and logout button REMOVED -->
         <hr>
         <h2>Inspections Overview</h2>
         <button id="refreshBtn">Refresh List</button>
@@ -41,9 +33,7 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody id="inspectionsTableBody">
-                <!-- Data rows will be added here -->
-            </tbody>
+            <tbody id="inspectionsTableBody"></tbody>
         </table>
     </div>
 
@@ -52,15 +42,12 @@
             <h2>Edit Inspection & Project Details</h2>
             <input type="hidden" id="editInspectionId">
             <input type="hidden" id="editProjectId">
-
             <fieldset>
                 <legend>Project Details (Editable)</legend>
                 <label for="editProjectNumber">Project Number:</label>
                 <input type="text" id="editProjectNumber" required><br>
-
                 <label for="editLatitude">Latitude:</label>
                 <input type="number" step="any" id="editLatitude" required><br>
-
                 <label for="editLongitude">Longitude:</label>
                 <input type="number" step="any" id="editLongitude" required><br>
             </fieldset>
@@ -69,28 +56,22 @@
                 <legend>Inspection Details (Editable)</legend>
                 <label for="editLoggerName">Logger Name:</label>
                 <input type="text" id="editLoggerName" required><br>
-
                 <label for="editAcreage">Acreage:</label>
                 <input type="number" step="0.1" id="editAcreage" required><br>
-
                 <label for="editInspectionDate">Inspection Date/Time:</label>
                 <input type="datetime-local" id="editInspectionDate" required><br>
-
                 <fieldset class="inner-fieldset">
                     <legend>BMPs Met?</legend>
                     <label><input type="radio" name="editBmpsMet" value="true" required> Yes</label>
                     <label><input type="radio" name="editBmpsMet" value="false"> No</label>
                 </fieldset>
-
                 <label for="editNotes">Notes:</label><br>
                 <textarea id="editNotes" rows="3"></textarea><br>
-
                 <p><strong>Map Image:</strong>
                     <a id="editMapLink" href="#" target="_blank" rel="noopener noreferrer">View Current Map</a>
                     <span id="noMapText" class="hidden">(No map uploaded)</span>
                 </p>
             </fieldset>
-
             <div class="modal-actions">
                 <button type="submit" id="saveEditBtn">Save Changes</button>
                 <button type="button" id="cancelEditBtn">Cancel</button>
@@ -99,27 +80,26 @@
         </form>
     </dialog>
 
-    <!-- Script to load and initialize supervisor.app.js -->
     <script>
+        // Inline script to ensure Supabase is available before supervisor.app.js runs its main logic
         function initializeSupervisorApp() {
-            // This function will be defined in supervisor.app.js
-            // and will contain all the code that is currently at the global scope in that file.
             if (typeof window.runSupervisorApp === 'function') {
-                console.log('Attempting to run Supervisor App initialization...');
                 window.runSupervisorApp();
             } else {
-                console.error('runSupervisorApp function not found. supervisor.app.js might not have loaded correctly or is missing the function.');
+                console.error('runSupervisorApp function not found in supervisor.app.js');
             }
         }
 
-        // Dynamically load supervisor.app.js
-        const supervisorScript = document.createElement('script');
-        supervisorScript.src = 'supervisor.app.js';
-        supervisorScript.onload = initializeSupervisorApp; // Call initialize AFTER script is loaded
-        supervisorScript.onerror = function() {
-            console.error('Failed to load supervisor.app.js');
-        };
-        document.body.appendChild(supervisorScript);
+        if (typeof Supabase !== 'undefined' && typeof Supabase.createClient === 'function') {
+            const supervisorAppScript = document.createElement('script');
+            supervisorAppScript.src = 'supervisor.app.js';
+            supervisorAppScript.onload = initializeSupervisorApp;
+            supervisorAppScript.onerror = () => console.error('Failed to load supervisor.app.js');
+            document.body.appendChild(supervisorAppScript);
+        } else {
+            console.error('CRITICAL: Supabase library not loaded. Supervisor App cannot start.');
+            alert('Error: Could not connect to backend services for supervisor app. Please try refreshing.');
+        }
     </script>
 </body>
 </html>
