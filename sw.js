@@ -1,12 +1,11 @@
-const CACHE_NAME = 'field-inspection-cache-v2'; // Increment version to force update
+const CACHE_NAME = 'field-inspection-cache-v3'; // Increment version to force update
 const urlsToCache = [
   '/', // Or '/index-worker.html' if that's your explicit start_url
   '/index-worker.html',
   '/style.css',
   '/app.js',
   '/manifest.json',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
+  '/icon.png',
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2' // Cache Supabase library
 ];
 
