@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Supervisor Dashboard</title>
     <link rel="stylesheet" href="supervisor.style.css">
-    <!-- Supabase library loaded first -->
+    <!-- Supabase library loaded first in HEAD -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Your app script, deferred -->
-    <script src="supervisor.app.js" defer></script>
+    <!-- supervisor.app.js will be loaded and initialized at the end of the body -->
 </head>
 <body>
     <h1>Supervisor Dashboard</h1>
@@ -100,6 +99,27 @@
         </form>
     </dialog>
 
-    <!-- NO SCRIPT TAGS HERE AT THE END OF THE BODY ANYMORE -->
+    <!-- Script to load and initialize supervisor.app.js -->
+    <script>
+        function initializeSupervisorApp() {
+            // This function will be defined in supervisor.app.js
+            // and will contain all the code that is currently at the global scope in that file.
+            if (typeof window.runSupervisorApp === 'function') {
+                console.log('Attempting to run Supervisor App initialization...');
+                window.runSupervisorApp();
+            } else {
+                console.error('runSupervisorApp function not found. supervisor.app.js might not have loaded correctly or is missing the function.');
+            }
+        }
+
+        // Dynamically load supervisor.app.js
+        const supervisorScript = document.createElement('script');
+        supervisorScript.src = 'supervisor.app.js';
+        supervisorScript.onload = initializeSupervisorApp; // Call initialize AFTER script is loaded
+        supervisorScript.onerror = function() {
+            console.error('Failed to load supervisor.app.js');
+        };
+        document.body.appendChild(supervisorScript);
+    </script>
 </body>
 </html>
