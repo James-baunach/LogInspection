@@ -13,31 +13,10 @@
 
     <h1>Field Project & Inspection</h1>
 
-    <div id="authSection">
-        <h2>Login / Sign Up</h2>
-        <input type="email" id="email" placeholder="Email" required><br>
-        <input type="password" id="password" placeholder="Password" required><br>
-        <button id="loginBtn">Login</button>
-        <button id="signupBtn">Sign Up</button>
-        <p id="authStatus"></p>
-    </div>
+    <!-- AuthSection and PasswordChangeSection REMOVED -->
 
-    <div id="passwordChangeSection" class="hidden">
-        <h2>Change Password</h2>
-        <input type="password" id="currentPassword" placeholder="Current Password" required><br>
-        <input type="password" id="newPassword" placeholder="New Password (min 6 chars)" required><br>
-        <input type="password" id="confirmNewPassword" placeholder="Confirm New Password" required><br>
-        <button id="updatePasswordBtn">Update Password</button>
-        <button id="cancelPasswordChangeBtn">Cancel</button>
-        <p id="passwordChangeStatus"></p>
-    </div>
-
-
-    <div id="mainContent" class="hidden">
-        <p>Logged in as: <span id="userEmail"></span>
-            <button id="logoutBtn">Logout</button>
-            <button id="showPasswordChangeBtn">Change Password</button>
-        </p>
+    <div id="mainContent"> <!-- No longer hidden by default -->
+        <!-- User email and logout/change password buttons REMOVED -->
         <hr>
 
         <div id="requestSection">
@@ -99,6 +78,26 @@
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script>
+        // Inline script to ensure Supabase is available before app.js runs its main logic
+        function initializeWorkerApp() {
+            if (typeof window.runWorkerApp === 'function') {
+                window.runWorkerApp();
+            } else {
+                console.error('runWorkerApp function not found in app.js');
+            }
+        }
+
+        if (typeof Supabase !== 'undefined' && typeof Supabase.createClient === 'function') {
+            const workerScript = document.createElement('script');
+            workerScript.src = 'app.js';
+            workerScript.onload = initializeWorkerApp;
+            workerScript.onerror = () => console.error('Failed to load app.js');
+            document.body.appendChild(workerScript);
+        } else {
+            console.error('CRITICAL: Supabase library not loaded. App cannot start.');
+            alert('Error: Could not connect to backend services. Please try refreshing.');
+        }
+    </script>
 </body>
 </html>
