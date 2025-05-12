@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timber Harvesting Inspection</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- jsPDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div id="app-container">
+
+        <!-- Page 1: Login -->
+        <div id="page1" class="page">  <!-- Removed style="display: none;" -->
+            <h1>Welcome</h1>
+            <label for="password">Enter Password:</label>
+            <input type="password" id="password" name="password">
+            <button id="loginButton">Submit</button>
+            <p id="loginError" class="error-message"></p>
+        </div>
+
+        <!-- Page 2: County & GPS -->
+        <div id="page2" class="page">  <!-- Removed style="display: none;" -->
+            <h2>Select County and Enter GPS</h2>
+            <div>
+                <label for="countySelect">County:</label>
+                <select id="countySelect" name="countySelect">
+                    <option value="">-- Select County --</option>
+                </select>
+            </div>
+            <div>
+                <label for="gpsCoordinates">Enter GPS (Lat, Long):</label>
+                <input type="text" id="gpsCoordinates" name="gpsCoordinates" placeholder="e.g., 38.12345, -84.12345">
+            </div>
+            <div>
+                <button id="getGPSButton">Get Current GPS</button>
+            </div>
+            <button id="submitCountyGPSButton">Submit to Continue</button>
+            <p id="page2Error" class="error-message"></p>
+        </div>
+
+        <!-- Page 3: Inspection Form -->
+        <div id="page3" class="page">  <!-- Removed style="display: none;" -->
+            <h2>Timber Harvesting Inspection Report</h2>
+            
+            <div class="form-section static-header">
+                <h3>Department Info (Save Once)</h3>
+                <div><label for="formBranch">BRANCH:</label><input type="text" id="formBranch"></div>
+                <div><label for="formBranchAddress">Address:</label><input type="text" id="formBranchAddress"></div>
+                <div><label for="formBranchCityStateZip">City, State, Zip Code:</label><input type="text" id="formBranchCityStateZip"></div>
+                <div><label for="formContactBranchOffice">Contact Branch Office at:</label><input type="text" id="formContactBranchOffice"></div>
+                <button id="saveHeaderInfoButton">Save Header Info</button>
+                <p id="headerInfoMsg" class="success-message"></p>
+            </div>
+
+            <hr>
+
+            <div class="form-section">
+                <div><label for="formSiteCode">SITE CODE:</label><input type="text" id="formSiteCode" readonly></div>
+                <div style="float: right; width: 40%;">
+                    <div><label for="formLat">Lat:</label><input type="text" id="formLat"></div>
+                    <div><label for="formLong">Long:</label><input type="text" id="formLong"></div>
+                    <div><label for="formDisMethod">Dis. Method:</label><input type="text" id="formDisMethod"></div>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+            
+            <div class="form-section">
+                <fieldset>
+                    <legend>INSPECTION TYPE:</legend>
+                    <label><input type="radio" name="inspectionType" value="INITIAL"> INITIAL</label>
+                    <label><input type="radio" name="inspectionType" value="PERIODIC"> PERIODIC</label>
+                    <label><input type="radio" name="inspectionType" value="COMPLIANCE"> COMPLIANCE</label>
+                    <label><input type="radio" name="inspectionType" value="FINAL"> FINAL</label>
+                </fieldset>
+            </div>
+
+            <div class="form-grid">
+                <div class="grid-col">
+                    <h3>Owner/Operator:</h3>
+                    <div><label for="formOwnerName">Name:</label><input type="text" id="formOwnerName"></div>
+                    <div><label for="formOwnerCompany">Company:</label><input type="text" id="formOwnerCompany"></div>
+                    <div><label for="formOwnerAddress">Address:</label><input type="text" id="formOwnerAddress"></div>
+                    <div><label for="formOwnerCityStateZip">City, State, Zip:</label><input type="text" id="formOwnerCityStateZip"></div>
+                    <div><label for="formMasterLogger">Master Logger:</label><input type="text" id="formMasterLogger"></div>
+                </div>
+                <div class="grid-col">
+                    <h3>Landowner:</h3>
+                    <div><label for="formLandownerName">Name:</label><input type="text" id="formLandownerName"></div>
+                    <div><label for="formLandownerAddress">Address:</label><input type="text" id="formLandownerAddress"></div>
+                    <div><label for="formLandownerCityStateZip">City, State, Zip:</label><input type="text" id="formLandownerCityStateZip"></div>
+                    <div><label for="formHarvestAcreage">Harvest Acreage:</label><input type="text" id="formHarvestAcreage"></div>
+                    <div><label for="formMasterLoggerID">Master logger ID Number:</label><input type="text" id="formMasterLoggerID"></div>
+                </div>
+            </div>
+            <div><label for="formLocationDescription">Location Description:</label><textarea id="formLocationDescription" rows="3"></textarea></div>
+            
+            <h3>PERFORMANCE STANDARD INSPECTED</h3>
+            <div class="form-grid">
+                <div class="grid-col">
+                    <fieldset>
+                        <legend>Master Logger On-site</legend>
+                        <label><input type="radio" name="bmpMasterLogger" value="YES"> YES</label>
+                        <label><input type="radio" name="bmpMasterLogger" value="NO"> NO</label>
+                        <label><input type="radio" name="bmpMasterLogger" value="N/A"> N/A</label>
+                    </fieldset>
+                    <fieldset>
+                        <legend>BMP #1-Access Roads, Trails & Landings</legend>
+                        <label><input type="radio" name="bmp1" value="YES"> YES</label>
+                        <label><input type="radio" name="bmp1" value="NO"> NO</label>
+                        <label><input type="radio" name="bmp1" value="N/A"> N/A</label>
+                    </fieldset>
+                    <fieldset>
+                        <legend>BMP #3-Streamside Management Zones (SMZ)</legend>
+                        <label><input type="radio" name="bmp3" value="YES"> YES</label>
+                        <label><input type="radio" name="bmp3" value="NO"> NO</label>
+                        <label><input type="radio" name="bmp3" value="N/A"> N/A</label>
+                    </fieldset>
+                    <fieldset>
+                        <legend>BMP #4-Sinkholes, Sinking Streams & Caves</legend>
+                        <label><input type="radio" name="bmp4" value="YES"> YES</label>
+                        <label><input type="radio" name="bmp4" value="NO"> NO</label>
+                        <label><input type="radio" name="bmp4" value="N/A"> N/A</label>
+                    </fieldset>
+                </div>
+                <div class="grid-col">
+                    <fieldset>
+                        <legend>BMP #5-Fluids & Trash</legend>
+                        <label><input type="radio" name="bmp5" value="YES"> YES</label>
+                        <label><input type="radio" name="bmp5" value="NO"> NO</label>
+                        <label><input type="radio" name="bmp5" value="N/A"> N/A</label>
+                    </fieldset>
+                    <fieldset>
+                        <legend>BMP #7-Fertilizers</legend>
+                        <label><input type="radio" name="bmp7" value="YES"> YES</label>
+                        <label><input type="radio" name="bmp7" value="NO"> NO</label>
+                        <label><input type="radio" name="bmp7" value="N/A"> N/A</label>
+                    </fieldset>
+                    <fieldset>
+                        <legend>BMP #10-Wetlands</legend>
+                        <label><input type="radio" name="bmp10" value="YES"> YES</label>
+                        <label><input type="radio" name="bmp10" value="NO"> NO</label>
+                        <label><input type="radio" name="bmp10" value="N/A"> N/A</label>
+                    </fieldset>
+                </div>
+            </div>
+            <div><label for="formComments">COMMENTS/OTHER CONDITIONS:</label><textarea id="formComments" rows="4"></textarea></div>
+
+            <h3>Abatement & Compliance</h3>
+            <div><label for="formEnforcementAction">TYPE OF ENFORCEMENT ACTION:</label><input type="text" id="formEnforcementAction"></div>
+            <div><label for="formCaseNo">CASE NO.:</label><input type="text" id="formCaseNo"></div>
+            <fieldset>
+                <legend>Have the remedial measures from the above enforcement action been satisfactorily completed?</legend>
+                <label><input type="radio" name="remedialCompleted" value="YES"> YES</label>
+                <label><input type="radio" name="remedialCompleted" value="NO"> NO</label>
+            </fieldset>
+            <div><label for="formRemedialNotCompleted">Remedial measures that have not been completed:</label><textarea id="formRemedialNotCompleted" rows="3"></textarea></div>
+
+            <hr>
+            <div class="form-grid">
+                <div class="grid-col">
+                    <div><label for="formInspector">INSPECTOR:</label><input type="text" id="formInspector"></div>
+                    <div><label for="formDateInspection">DATE OF INSPECTION:</label><input type="date" id="formDateInspection"></div>
+                </div>
+                <div class="grid-col">
+                    <div><label for="formReceivedBy">RECEIVED BY:</label><input type="text" id="formReceivedBy"></div>
+                    <div>SIGNATURE: (Leave blank for PDF, sign on printout)</div>
+                </div>
+            </div>
+            <div>
+                <label>Personal Service:</label><input type="checkbox" id="formPersonalService">
+                <label>First Class Mail:</label><input type="checkbox" id="formFirstClassMail">
+                <label>Delivered Certified Mail/USPS No:</label><input type="text" id="formCertifiedMailNo">
+            </div>
+
+            <button id="submitFormButton">Submit and Save to PDF</button>
+            <p id="page3Error" class="error-message"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
